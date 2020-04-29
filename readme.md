@@ -17,7 +17,9 @@ This scripts solves this by always showing all of the window titles in my bar an
 
 Shows a vertical list of window titles. `[ window name ]` denotes currently active window.
 
-It shows icon before each window title as well. Those are are `Material Icons` and `window_class_icon_map.txt` keeps a map of  `Window class [Icon]`. There is a fallback icon for when there is no icon for current program.
+It shows icon before each window title as well. Those are are `Material Icons` and `window_class_icon_map.txt` keeps a map of  `Window class [Icon]`.
+
+There is a fallback icon for when there is no icon for current program.
 
 ## How it works
 
@@ -36,6 +38,8 @@ Programs:
 Fonts:
 - `JetBrains Mono`
 - `Material icons`
+
+Fonts can be replaced, but you will need to provide your own `WINDOWCLASS -> ICON` mappings to be able to display icons, more on that below.
 
 ## Installation
 
@@ -63,16 +67,9 @@ window_titles &
 
 ## Customization
 
-### Don't generate window titles if there is only one window on desktop
+### Don't generate window titles for desktop if there is only one window
 
-Uncomment below in `bspwm/window_titles.sh`:
-
-```shell
-# don't print names if there is only one
-# [[ "$number_of_windows" == "1" ]] && windows_print="" || windows_print="$curr_wins"
-```
-
-It won't generate window titles if there is only one window on that desktop.
+Change `window_titles &` to `window_titles nomonocle &` in `~/.config/bspwm/bspwmrc`
 
 ### Add your own icons
 

@@ -28,8 +28,13 @@ bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
         for window_id in $winids_on_desktop; do
             # replace all spaces and tabs with single spaces for easier cutting
             window=$( echo "$winlist" | grep -i "$window_id" | tr -s '[:blank:]' )
-            # get window name and cut it to 20 chars
-            window_name=$( echo "$window" | cut -d " " -f 5- | cut -c1-20 )
+            # get window name
+            window_name=$( echo "$window" | cut -d " " -f 5- )
+            # longer window titles if there is only one window
+            [[ "$number_of_windows" == "1" ]] && char_cut="40" || char_cut="20"
+            # cut the window name
+            window_name_short=$( echo "$window_name" | cut -c1-"$char_cut" )
+
             # get window class and match after a dot to get app name
             window_class=$( echo "$window" | cut -d " " -f 3 | sed 's/.*\.//')
 
@@ -37,7 +42,7 @@ bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
             if [[ -n "$window_name" ]]; then
 
                 # trim window name
-                window_name=$( echo "$window_name" | sed -e 's/^[[:space:]]*//' )
+                window_name=$( echo "$window_name_short" | sed -e 's/^[[:space:]]*//' )
 
                 # get icon for class name
                 window_icon=$( grep "$window_class" "${bspwm_path}/window_class_icon_map.txt" | cut -d " " -f2 )
@@ -58,9 +63,12 @@ bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
         done
 
         # don't print names if there is only one
-        # [[ "$number_of_windows" == "1" ]] && windows_print="" || windows_print="$curr_wins"
-
-        windows_print="$curr_wins"
+        # turned on with 'nomonocle'
+        if [[ "$1" == "nomonocle" ]]; then
+            [[ "$number_of_windows" == "1" ]] && windows_print="" || windows_print="$curr_wins"
+        else
+            windows_print="$curr_wins"
+        fi
 
         # print out the window names to files for use in a bar
         echo "$windows_print" > "${bspwm_path}/current_windows_${index}.txt"
