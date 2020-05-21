@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 
-bspwm_path="${HOME}/.config/bspwm"
+cache_path="${HOME}/.cache"
+
+icon_map="
+Google-chrome 
+Firefox 
+Code 
+VSCodium 
+jetbrains-phpstorm 
+Slack 
+kitty 
+Nautilus 
+Fallback ·
+"
 
 # subscribe to events on which the window title list will get updated
 bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
@@ -45,12 +57,11 @@ bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
                 window_name=$( echo "$window_name_short" | sed -e 's/^[[:space:]]*//' )
 
                 # get icon for class name
-                window_icon=$( grep "$window_class" "${bspwm_path}/window_class_icon_map.txt" | cut -d " " -f2 )
-                echo "$window_icon"
+                window_icon=$( grep "$window_class" <<< "$icon_map" | cut -d " " -f2 )
 
                 # fallback icon if class not found
                 if [[ -z "$window_icon" ]]; then
-                    window_icon=$( grep "Fallback" "${bspwm_path}/window_class_icon_map.txt" | cut -d " " -f2 )
+                    window_icon=$( grep "Fallback" <<< "$icon_map" | cut -d " " -f2 )
                 fi
 
                 # join icon and name
@@ -71,7 +82,7 @@ bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
         fi
 
         # print out the window names to files for use in a bar
-        echo "$windows_print" > "${bspwm_path}/current_windows_${index}.txt"
+        echo "$windows_print" > "${cache_path}/bspwm_windows_${index}.txt"
         unset curr_wins
 
     done
