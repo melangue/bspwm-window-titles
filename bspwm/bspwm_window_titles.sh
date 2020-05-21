@@ -2,17 +2,7 @@
 
 cache_path="${HOME}/.cache"
 
-icon_map="
-Google-chrome 
-Firefox 
-Code 
-VSCodium 
-jetbrains-phpstorm 
-Slack 
-kitty 
-Nautilus 
-Fallback ·
-"
+icon_map=$( cat "./bspwm_window_titles_icon_map.txt" )
 
 # subscribe to events on which the window title list will get updated
 bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
