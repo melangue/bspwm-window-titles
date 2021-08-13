@@ -1,6 +1,6 @@
 # bspwm_window_titles daemon
 
-This script gives you the possibility to show all window titles on your current bspwm desktop on your bar.
+This script gives you the possibility to show all window titles on your current bspwm desktop on your bar. Allows for directly clicking on a window name to focus the window and styling (with polybar format tags).
 
 Works with multi head and has been tested with polybar.
 It needs to be launched as a daemon inside your `bspwmrc`.
@@ -9,7 +9,7 @@ It needs to be launched as a daemon inside your `bspwmrc`.
 
 I use bspwm's monocle mode a lot and I kept forgetting what windows are on which desktop, cycling between them is a bit annyoing.
 
-This scripts solves this by always showing all of the window titles in my bar and allows me to cycle between them with mouse clicks as well.
+This scripts solves this by showing all of the window titles in my bar and allows me switch between them with mouse clicks as well.
 
 ## How it looks
 
@@ -20,6 +20,7 @@ Shows a vertical list of window titles. `[ window name ]` denotes currently acti
 It shows icon before each window title as well. Those are are `Material Icons` and `bspwm_window_titles_icon_map.txt` keeps a map of  `Window class [Icon]`.
 
 There is a fallback icon for when there is no icon for current program.
+You can supply your own icons in the font of your choosing - the one you use in your polybar.
 
 ## How it works
 
@@ -28,6 +29,21 @@ There is a fallback icon for when there is no icon for current program.
 - Puts window titles in text files for use in a bar
 - Left/Right click on window titles will focus previous/next window (polybar)
 
+## Supported options
+- `p` - turns on polybar mode - Clicking on window name will focus the window with that name
+- `m` - monocle mode - Won't print window names when there is only one window on deskto
+- `f` - format - You can influence how the window name final output with polybar format tags. More on that below. Defaults to
+```sh
+{NAME} # normal window name
+[ {NAME} ] # focused window name
+```
+- `i` - icon map path - Custom path to file containing icon map - defaults to `./bspwm_window_titles_icon_map.txt` relative to the folder where `bspwm_window_titles` is located
+- `h` - Display help
+- `V` - Display script version and exit
+
+## Formatting
+In case you would like to format the window names with polybar
+
 ## Prerequisites
 
 Programs:
@@ -35,15 +51,15 @@ Programs:
 - `polybar`
 - `wmctrl`
 
-Fonts:
-- `JetBrains Mono`
+Fonts (needed only if using default config):
+- `JetBrains Mono` (if using default config)
 - `Material icons`
 
 Fonts can be replaced, but you will need to provide your own `WINDOWCLASS -> ICON` mappings to be able to display icons, more on that below.
 
 ## Installation
 
-Installation guide assumes you are using polybar, have some sort of `launch_polybar.sh` script (which takes care of restarting polybar) and a multi-monitor setup - should work with single monitor setups too.
+Installation guide assumes you are using polybar, have some sort of `launch_polybar.sh` script (which takes care of restarting polybar) and a multi-monitor setup - should work with single monitor setup too.
 
 - Download or `git clone` this repo
 - Copy `bspwm/bspwm_window_titles.sh.sh` and `bspwm/bspwm_window_titles_icon_map.txt` to `~/.config/bspwm`
@@ -109,17 +125,11 @@ modules-center                = windowlist
 ## module
 [module/windowlist]
 type = custom/script
-interval = 0.5
 exec = ${env:P_BSPWM_WINDOW_CMD}
-
-; cycle between windows
-click-left = bspc node -f next.local
-click-right = bspc node -f prev.local
-
+interval = 0.5
 format = <label>
 format-background = #000
 format-foreground = #FFF
-format-padding = 4
 ```
 
 - Restart bspwm
