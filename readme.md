@@ -42,7 +42,13 @@ You can supply your own icons in the font of your choosing - the one you use in 
 - `V` - Display script version and exit
 
 ## Formatting
-In case you would like to format the window names with polybar
+In case you would like to format the window names with polybar format tags, you need to start up the script in following way
+```sh
+bspwm_window_title -f "%{F#f00}{NAME}%{F-}" -f "{NAME}"
+```
+The order matters - first format is **focused** window name, second is for **normal** window name.
+Focused window name font color will be red and normal window font color as is set for label of your custom module.
+You can use any [polybar format tags](https://github.com/polybar/polybar/wiki/Formatting) you want.
 
 ## Prerequisites
 
@@ -135,10 +141,6 @@ format-foreground = #FFF
 - Restart bspwm
 
 ## Customization
-
-### Don't generate window titles for desktop if there is only one window
-
-Change `bspwm_window_titles &` to `bspwm_window_titles nomonocle &` in `~/.config/bspwm/bspwmrc`
 
 ### Add your own icons
 
