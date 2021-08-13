@@ -46,6 +46,11 @@ bspc subscribe node_focus node_remove desktop_focus | while read -r _; do
                 # trim window name
                 window_name=$( echo "$window_name_short" | sed -e 's/^[[:space:]]*//' )
 
+                # display instance name if there is no window title
+                if [[ "$window_name" == "N/A" ]]; then
+                    window_name=$(echo "$window" | cut -d " " -f 3 | cut -d "." -f 2 )
+                fi
+
                 # get icon for class name
                 window_icon=$( grep "$window_class" <<< "$icon_map" | cut -d " " -f2 )
 
